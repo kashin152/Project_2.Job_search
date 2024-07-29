@@ -16,7 +16,7 @@ class GetVacanciesAPI(ABC):
 
 
 class HeadHunterAPI(GetVacanciesAPI):
-    """ Класс для подключения к hh.ru """
+    """Класс для подключения к hh.ru"""
 
     def __init__(self):
         self.url = "https://api.hh.ru/vacancies"
