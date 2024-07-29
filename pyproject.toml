@@ -9,6 +9,7 @@ packages = [{include = "project_2"}]
 [tool.poetry.dependencies]
 python = "^3.12"
 requests = "^2.32.3"
+pytest = "^8.3.2"
 
 
 [build-system]
