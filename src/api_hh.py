@@ -3,34 +3,30 @@ from abc import ABC, abstractmethod
 import requests
 
 
-class GetApiHH(ABC):
-
-    """Абстрактный класс для подключения к API"""
+class GetVacanciesAPI(ABC):
+    """Абстрактный класс для получения вакансии с hh.ru"""
 
     @abstractmethod
-    def load_vacancies(self):
+    def get_response(self, keyword, per_page):
+        pass
+
+    @abstractmethod
+    def get_vacancies(self, keyword, per_page):
         pass
 
 
-class ApiHH(GetApiHH):
-
-    """Класс для работы с API HeadHunter"""
+class HeadHunterAPI(GetVacanciesAPI):
+    """ Класс для подключения к hh.ru """
 
     def __init__(self):
-        self.url = 'https://api.hh.ru/vacancies'
-        self.headers = {'User-Agent': 'HH-User-Agent'}
-        self.params = {"text": "", "page": 0, 'per_page': 100}
-        self.vacancies = []
+        self.url = "https://api.hh.ru/vacancies"
+        self.headers = {"User-Agent": "HH-User-Agent"}
+        self.params = {"text": "", "per_page": "", "only_with_salary": True}
 
-    def load_vacancies(self, keyword):
-        self.params['text'] = keyword
-        while self.params.get('page') != 20:
-            response = requests.get(self.url, params=self.params)
-            vacancies = response.json()['items']
-            return vacancies
+    def get_response(self, keyword, per_page):
+        self.params["text"] = keyword
+        self.params["per_page"] = per_page
+        return requests.get(self.url, params=self.params)
 
-
-if __name__ == "__main__":
-    list_vacancies = ApiHH()
-    vacancies = list_vacancies.load_vacancies("Тестировщик")
-    print(vacancies)
+    def get_vacancies(self, keyword: str, per_page: int):
+        return self.get_response(keyword, per_page).json()["items"]
